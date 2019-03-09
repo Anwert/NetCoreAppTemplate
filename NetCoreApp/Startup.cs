@@ -27,6 +27,8 @@ namespace NetCoreApp
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
+			app.UseStaticFiles();
+			
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
@@ -37,7 +39,7 @@ namespace NetCoreApp
 			}
 
 			app.UseHttpsRedirection();
-			app.UseMvc(routes => { routes.MapRoute("default", "{controller=Person}/{action=Index}/{id?}"); });
+			app.UseMvc(routes => { routes.MapRoute("default", "{controller=Image}/{action=Index}/{id?}"); });
 		}
 
 		public void ConfigureContainer(ContainerBuilder builder)
