@@ -9,17 +9,24 @@ namespace NetCoreApp.Models.Service
 {
 	public class ImageService : IImageService
 	{
-		public async Task<string> UploadImage(IFormFile file)
+		private readonly IRabbitService _rabbitService;
+
+		public ImageService(IRabbitService rabbit_service)
+		{
+			_rabbitService = rabbit_service;
+		}
+		
+		public async Task<byte[]> UploadImage(IFormFile file)
 		{
 			var file_bytes = ConvertToBytes(file);
 			if (CheckIfImageFile(file_bytes))
 			{
-				return ConvertToBase64(file_bytes);
+				_rabbitService.Send(file_bytes);
+				return file_bytes;
 			}
 
-			return "Invalid image file";
+			return null;
 		}
-		
 		
 		private ImageFormat GetImageFormat(byte[] bytes)
 		{
@@ -73,11 +80,6 @@ namespace NetCoreApp.Models.Service
 			}
 
 			return file_bytes;
-		}
-
-		private string ConvertToBase64(byte[] file_bytes)
-		{
-			return Convert.ToBase64String(file_bytes);
 		}
 
 		/// <summary>

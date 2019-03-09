@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetCoreApp.Models.Service;
@@ -19,10 +20,16 @@ namespace NetCoreApp.Controllers
 			return View();
 		}
 		
-		public async Task<IActionResult> UploadImage(IFormFile file)
+		public async Task<IActionResult> UploadImage(List<IFormFile> files)
 		{
-			var result = await _imageService.UploadImage(file);
-			return new ObjectResult(result);
+			var results = new List<byte[]>();
+			foreach (var file in files)
+			{
+				var result = await _imageService.UploadImage(file);
+				results.Add(result);
+			}
+
+			return RedirectToAction("Index");
 		}
 	}
 }

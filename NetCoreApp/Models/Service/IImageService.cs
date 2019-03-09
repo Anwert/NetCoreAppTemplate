@@ -5,6 +5,6 @@ namespace NetCoreApp.Models.Service
 {
 	public interface IImageService
 	{
-		Task<string> UploadImage(IFormFile file);
+		Task<byte[]> UploadImage(IFormFile file);
 	}
 }
